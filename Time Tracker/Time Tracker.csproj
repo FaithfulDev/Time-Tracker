@@ -73,6 +73,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\Styles\Basic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -97,15 +101,26 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\External\Font-Awesome\metadata\categories.yml" />
+    <None Include="Resources\External\Font-Awesome\metadata\icons.json" />
+    <None Include="Resources\External\Font-Awesome\metadata\icons.yml" />
+    <None Include="Resources\External\Font-Awesome\metadata\shims.json" />
+    <None Include="Resources\External\Font-Awesome\metadata\shims.yml" />
+    <None Include="Resources\External\Font-Awesome\metadata\sponsors.yml" />
+    <Resource Include="Resources\External\Font-Awesome\otfs\Font Awesome 5 Brands-Regular-400.otf" />
+    <Resource Include="Resources\External\Font-Awesome\otfs\Font Awesome 5 Free-Regular-400.otf" />
+    <Resource Include="Resources\External\Font-Awesome\otfs\Font Awesome 5 Free-Solid-900.otf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Clock.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Clock.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Images\Clock.ico" />
+    <Resource Include="Resources\External\Font-Awesome\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
