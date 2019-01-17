@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Threading;
+using Time_Tracker.Resources.Classes;
 
 namespace Time_Tracker
 {
     public partial class MainWindow : Window
     {
-
+        private Database oDatabase;
         private DateTime dStart;
         private DispatcherTimer oTimer = new DispatcherTimer();
 
@@ -17,6 +18,8 @@ namespace Time_Tracker
 
             oTimer.Tick += new EventHandler(Timer_Tick);
             oTimer.Interval = new TimeSpan(0, 0, 1);            
+
+            oDatabase = new Database(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\TimeTracker");
         }
 
         private void SetStartupPosition()
@@ -49,7 +52,7 @@ namespace Time_Tracker
             if (oTimer.IsEnabled)
             {
                 if(MessageBox.Show("If you quit the App now your current timer will be lost. Quit anyway?",
-                                "Quit?", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                                "Quit?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
                 {
                     e.Cancel = true;
                 }
@@ -90,7 +93,7 @@ namespace Time_Tracker
 
             DateTime dEnd = DateTime.Now;
 
-            //Save to database - coming soon.
+            oDatabase.Save(new Database.TimeRecord(0, this.dStart, dEnd, this.uiActivity.Text, this.uiDescription.Text));
 
             //Start new timer 
             UiStart_Click(null, null);
