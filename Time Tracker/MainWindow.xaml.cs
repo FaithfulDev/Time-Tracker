@@ -91,7 +91,7 @@ namespace Time_Tracker
         {
             oTimer.Stop();
 
-            DateTime dEnd = DateTime.Now;
+            DateTime dEnd = DateTime.Now.AddSeconds(-1);
 
             oDatabase.Save(new Database.TimeRecord(0, this.dStart, dEnd, this.uiActivity.Text, this.uiDescription.Text));
 
