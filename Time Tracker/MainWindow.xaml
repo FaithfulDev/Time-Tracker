@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
-        Title="MainWindow" Height="135" Width="268" ShowInTaskbar="False" WindowStartupLocation="Manual" WindowStyle="None" ResizeMode="NoResize" Deactivated="Window_Deactivated" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="MainWindow" Height="137" Width="268" ShowInTaskbar="False" WindowStartupLocation="Manual" WindowStyle="None" Background="{StaticResource Color2}" ResizeMode="NoResize" Deactivated="Window_Deactivated" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
 
         <tb:TaskbarIcon x:Name="uiTrayIcon"
@@ -21,24 +21,26 @@
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
 
-        <StackPanel>
-            <DockPanel>
-                <Button Name="uiStart" Click="UiStart_Click" Content="&#xf04b;" FontFamily="{StaticResource FontAwesomeSolid}" DockPanel.Dock="Left" Width="28" Height="28"/>
-                <Button Name="uiStop" Click="UiStop_Click" Content="&#xf04d;" FontFamily="{StaticResource FontAwesomeSolid}" DockPanel.Dock="Left" Width="28" Height="28"/>
-                <Button Name="uiClose" Click="UiClose_Click"  Content="&#xf057;" FontFamily="{StaticResource FontAwesomeSolid}" DockPanel.Dock="Right" Width="28" Height="28"/>
-                <Button Name="uiSettings" Content="&#xf013;" FontFamily="{StaticResource FontAwesomeSolid}" DockPanel.Dock="Right" Width="28" Height="28"/>
-                <Button Name="uiShowAll" Content="Show All" DockPanel.Dock="Right" Padding="7,5" Height="28"/>
-                <Label Name="uiTime" Content="00:00:00" HorizontalContentAlignment="Center" FontSize="13px"/>
-            </DockPanel>
-            <DockPanel>
-                <Label Name="uiOvertimeLabel" Content="Elapsed:" DockPanel.Dock="Left" Padding="5,5,2,5"/>
-                <Label Name="uiOvertime" Content="00:00:00 (+00:00)"/>
-            </DockPanel>
+        <Border Style="{StaticResource OuterBorder}">
             <StackPanel>
-                <TextBox Name="uiActivity" Margin="5,0,5,2"/>
-                <TextBox Name="uiDescription" Height="54" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Margin="5,2,5,5"/>
+                <DockPanel>
+                    <Button Name="uiStart" Click="UiStart_Click" Content="&#xf04b;" FontFamily="{StaticResource FontAwesomeSolid}" DockPanel.Dock="Left" Width="28" Height="28" BorderThickness="0,0,1,1"/>
+                    <Button Name="uiStop" Click="UiStop_Click" Content="&#xf04d;" FontFamily="{StaticResource FontAwesomeSolid}" DockPanel.Dock="Left" Width="28" Height="28" BorderThickness="0,0,1,1"/>
+                    <Button Name="uiClose" Click="UiClose_Click"  Content="&#xf057;" FontFamily="{StaticResource FontAwesomeSolid}" DockPanel.Dock="Right" Width="28" Height="28" BorderThickness="0,0,0,1"/>
+                    <Button Name="uiSettings" Content="&#xf013;" FontFamily="{StaticResource FontAwesomeSolid}" DockPanel.Dock="Right" Width="28" Height="28" BorderThickness="0,0,1,1"/>
+                    <Button Name="uiShowAll" Content="Show All" DockPanel.Dock="Right" Padding="7,5" Height="28" BorderThickness="0,0,1,1"/>
+                    <Label Name="uiTime" Content="00:00:00" HorizontalContentAlignment="Center" FontSize="13px" BorderThickness="0,0,1,1"/>
+                </DockPanel>
+                <DockPanel>
+                    <Label Name="uiOvertimeLabel" Content="Elapsed:" DockPanel.Dock="Left" FontWeight="Bold" Padding="5,5,2,5" BorderThickness="0"/>
+                    <Label Name="uiOvertime" Content="00:00:00 (+00:00)" BorderThickness="0"/>
+                </DockPanel>
+                <StackPanel>
+                    <TextBox Name="uiActivity" Margin="5,0,5,2"/>
+                    <TextBox Name="uiDescription" Height="54" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Margin="5,2,5,5"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </Border>       
 
     </Grid>
 </Window>
