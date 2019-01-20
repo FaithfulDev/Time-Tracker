@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SQLite;
+using System.Collections.Generic;
 
 namespace Time_Tracker.Resources.Classes
 {
@@ -52,8 +53,8 @@ namespace Time_Tracker.Resources.Classes
             oSQLiteConnection.Open();
 
             string sSQL = $@"INSERT INTO TimeTracker(start, [end], activity, description) VALUES 
-                             ('{oTimeRecord.dStart.ToString("yyyy-MM-dd hh:mm:ss")}', 
-                              '{oTimeRecord.dEnd.ToString("yyyy-MM-dd hh:mm:ss")}', 
+                             ('{oTimeRecord.dStart.ToString("yyyy-MM-dd HH:mm:ss")}', 
+                              '{oTimeRecord.dEnd.ToString("yyyy-MM-dd HH:mm:ss")}', 
                                {(oTimeRecord.sActivitiy != "" ? "'" + oTimeRecord.sActivitiy.Replace("'", "''") + "'":"NULL")}, 
                                {(oTimeRecord.sDescription != "" ? "'" + oTimeRecord.sDescription.Replace("'", "''") + "'" : "NULL")});";
 
@@ -62,6 +63,62 @@ namespace Time_Tracker.Resources.Classes
             oSQLiteConnection.Close();
 
             return true;
+        }
+
+        public List<TimeRecord> GetTodaysTimes()
+        {
+            List<TimeRecord> cTodaysTimes = new List<TimeRecord>();
+
+            SQLiteConnection oSQLiteConnection = new SQLiteConnection($"Data Source={sDatabasePath}\\TimeTracker.db;Version=3;foreign keys=true;");
+            oSQLiteConnection.Open();
+
+            string sSQL = $@"SELECT * FROM TimeTracker WHERE start >= date('now')";
+
+            SQLiteDataReader oSQLiteReader = new SQLiteCommand(sSQL, oSQLiteConnection).ExecuteReader();
+
+            while (oSQLiteReader.Read())
+            {
+                TimeRecord oTimeRecord =
+                    new TimeRecord(
+                        int.Parse(oSQLiteReader["id"].ToString()),
+                        DateTime.Parse(oSQLiteReader["start"].ToString()),
+                        DateTime.Parse(oSQLiteReader["end"].ToString()),
+                        oSQLiteReader["activity"].ToString(),
+                        oSQLiteReader["description"].ToString()
+                    );
+
+                cTodaysTimes.Add(oTimeRecord);
+            }
+
+            oSQLiteConnection.Close();
+
+            return cTodaysTimes;
+        }
+
+        public int GetOverTime(int iStandardWorkTimeSeconds)
+        {
+            int iOverTime = 0;
+
+            SQLiteConnection oSQLiteConnection = new SQLiteConnection($"Data Source={sDatabasePath}\\TimeTracker.db;Version=3;foreign keys=true;");
+            oSQLiteConnection.Open();
+
+            string sSQL = 
+                $@"SELECT 
+                     (SELECT count(DISTINCT date(start)) from TimeTracker WHERE date(start) != date('now', 'localtime')) * {iStandardWorkTimeSeconds} TotalBaseTime,
+                     ifnull((SELECT sum(strftime('%s', [end]) - strftime('%s', start)) FROM TimeTracker WHERE date(start) != date('now', 'localtime')), 0) TotalActualTime
+                   FROM TimeTracker LIMIT 1";
+
+            SQLiteDataReader oSQLiteReader = new SQLiteCommand(sSQL, oSQLiteConnection).ExecuteReader();
+
+            while (oSQLiteReader.Read())
+            {                 
+                iOverTime = int.Parse(oSQLiteReader["TotalActualTime"].ToString()) 
+                            - int.Parse(oSQLiteReader["TotalBaseTime"].ToString());
+            }
+
+            oSQLiteConnection.Close();
+
+            return iOverTime;
         }
 
         /// <summary>
