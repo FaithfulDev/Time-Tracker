@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Threading;
+using System.Collections.Generic;
 using Time_Tracker.Resources.Classes;
 
 namespace Time_Tracker
@@ -10,6 +11,10 @@ namespace Time_Tracker
         private Database oDatabase;
         private DateTime dStart;
         private DispatcherTimer oTimer = new DispatcherTimer();
+        private List<Database.TimeRecord> cTodaysTimes;
+        private int iStandardWorkTimeSeconds = 28800;
+        private int iWorkedTimeSeconds;
+        private int iOverTime;
 
         public MainWindow()
         {
@@ -20,6 +25,22 @@ namespace Time_Tracker
             oTimer.Interval = new TimeSpan(0, 0, 1);            
 
             oDatabase = new Database(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\TimeTracker");
+            cTodaysTimes = oDatabase.GetTodaysTimes();
+            CalculateWorkedTime();
+
+            UpdateView();
+        }
+
+        private void CalculateWorkedTime()
+        {
+            iWorkedTimeSeconds = 0;
+
+            foreach (Database.TimeRecord oTime in cTodaysTimes)
+            {
+                iWorkedTimeSeconds += (int)Math.Round((oTime.dEnd - oTime.dStart).TotalSeconds, 0);
+            }
+            
+            iOverTime = oDatabase.GetOverTime(iStandardWorkTimeSeconds);
         }
 
         private void SetStartupPosition()
@@ -82,9 +103,10 @@ namespace Time_Tracker
             this.uiActivity.Text = "";
             this.uiDescription.Text = "";
 
-            //Call the tick event directly to make it start right away.
-            Timer_Tick(null, null);
             oTimer.Start();
+
+            //Update View so that the timer gets updated right away, instead of in 1 second.
+            UpdateView();            
         }
 
         private void UiStop_Click(object sender, RoutedEventArgs e)
@@ -92,8 +114,12 @@ namespace Time_Tracker
             oTimer.Stop();
 
             DateTime dEnd = DateTime.Now.AddSeconds(-1);
-
-            oDatabase.Save(new Database.TimeRecord(0, this.dStart, dEnd, this.uiActivity.Text, this.uiDescription.Text));
+            
+            Database.TimeRecord oTimeRecord = new Database.TimeRecord(0, this.dStart, dEnd, this.uiActivity.Text, this.uiDescription.Text);
+            oDatabase.Save(oTimeRecord);
+            cTodaysTimes.Add(oTimeRecord);
+            
+            CalculateWorkedTime();
 
             //Start new timer 
             UiStart_Click(null, null);
@@ -101,7 +127,41 @@ namespace Time_Tracker
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            this.uiTime.Content = DateTime.Parse((DateTime.Now - dStart).ToString()).ToString("HH:mm:ss");
+            UpdateView();
+        }
+
+        private void UpdateView()
+        {
+            if (oTimer.IsEnabled)
+            {
+                this.uiTime.Content = DateTime.Parse((DateTime.Now - dStart).ToString()).ToString("HH:mm:ss");
+            }
+            else
+            {
+                this.uiTime.Content = "--:--:--";
+                dStart = DateTime.Now;
+            }
+
+            string sWorkedTime = "";
+            string sOverTime = "";
+
+            int iWorkedTimePlusCurrent = iWorkedTimeSeconds + (int)Math.Round((DateTime.Now - dStart).TotalSeconds, 0);
+
+            if (iWorkedTimePlusCurrent < iStandardWorkTimeSeconds)
+            {
+                sWorkedTime = TimeSpan.FromSeconds(iWorkedTimePlusCurrent).ToString(@"hh\:mm\:ss");
+                sOverTime = (iOverTime >= 0 ? "+" : "-")
+                        + TimeSpan.FromSeconds((iOverTime >= 0 ? iOverTime : iOverTime * (-1))).ToString(@"hh\:mm");
+            }
+            else
+            {
+                int iOverTimePlusCurrent = iOverTime + (iWorkedTimePlusCurrent - iStandardWorkTimeSeconds);
+                sWorkedTime = TimeSpan.FromSeconds(iStandardWorkTimeSeconds).ToString(@"hh\:mm\:ss");
+                sOverTime = (iOverTimePlusCurrent >= 0 ? "+" : "-")
+                        + TimeSpan.FromSeconds((iOverTimePlusCurrent >= 0 ? iOverTimePlusCurrent : iOverTimePlusCurrent * (-1))).ToString(@"hh\:mm");
+            }
+
+            this.uiOvertime.Content = $"{sWorkedTime} ({sOverTime})";
         }
     }
 }
