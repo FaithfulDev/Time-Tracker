@@ -67,6 +67,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Resources\Classes\Database.cs" />
+    <Compile Include="Resources\Classes\JSONParser.cs" />
+    <Compile Include="Resources\Classes\Settings.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
