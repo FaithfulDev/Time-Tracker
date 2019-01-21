@@ -11,6 +11,8 @@ This document tracks changes parallel to development and contains unreleased cha
 ### New Features
 * Calculate total worked time (current day) and over time (for all days).
 * Dark App Theme (there will be others later on).
+* New Setting: Make window movable
+    * User can decide if the window is fixed at its location at the corner of the desktop or freely movable.
 ### Bug Fixes
 * End time is now always set to `now-1` to align with the start time of the next timer.
 * Start and End time are now saved in 24h format.

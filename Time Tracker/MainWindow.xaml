@@ -7,7 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="137" Width="268" ShowInTaskbar="False" WindowStartupLocation="Manual" WindowStyle="None" Background="{StaticResource Color2}" ResizeMode="NoResize" Deactivated="Window_Deactivated" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Name="uiDragAreaRow" Height="0"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
         <tb:TaskbarIcon x:Name="uiTrayIcon"
                     Visibility="Visible"
                     IconSource="/Resources/Images/Clock.ico"
@@ -22,6 +26,10 @@
         </tb:TaskbarIcon>
 
         <Border Style="{StaticResource OuterBorder}">
+            <Label Background="{StaticResource Color1}" BorderThickness="0" MouseLeftButtonDown="DragWindow_MouseLeftButtonDown"/>
+        </Border>        
+
+        <Border Style="{StaticResource OuterBorder}" Grid.Row="1">
             <StackPanel>
                 <DockPanel>
                     <Button Name="uiStart" Click="UiStart_Click" Content="&#xf04b;" FontFamily="{StaticResource FontAwesomeSolid}" DockPanel.Dock="Left" Width="28" Height="28" BorderThickness="0,0,1,1"/>

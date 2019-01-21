@@ -9,6 +9,7 @@ namespace Time_Tracker
     public partial class MainWindow : Window
     {
         private Database oDatabase;
+        private Settings oSettings;
         private DateTime dStart;
         private DispatcherTimer oTimer = new DispatcherTimer();
         private List<Database.TimeRecord> cTodaysTimes;
@@ -25,10 +26,19 @@ namespace Time_Tracker
             oTimer.Interval = new TimeSpan(0, 0, 1);            
 
             oDatabase = new Database(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\TimeTracker");
+            oSettings = new Settings(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\TimeTracker");
+            ApplySettings();
+
             cTodaysTimes = oDatabase.GetTodaysTimes();
             CalculateWorkedTime();
 
             UpdateView();
+            MakeWindowUnMovable();
+        }
+
+        private void ApplySettings()
+        {
+            if (oSettings.bWindowMovable){ MakeWindowMovable(); }else{ MakeWindowUnMovable(); }
         }
 
         private void CalculateWorkedTime()
@@ -162,6 +172,34 @@ namespace Time_Tracker
             }
 
             this.uiOvertime.Content = $"{sWorkedTime} ({sOverTime})";
+        }
+
+        private void DragWindow_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
+        }
+
+        private void MakeWindowMovable()
+        {
+            if(this.uiDragAreaRow.Height.ToString() == "0")
+            {
+                this.uiDragAreaRow.Height = new GridLength(10);
+                this.Height += 10;
+                this.Top -= 10;
+            }            
+        }
+
+        private void MakeWindowUnMovable()
+        {
+            if(this.uiDragAreaRow.Height.ToString() == "10")
+            {
+                this.uiDragAreaRow.Height = new GridLength(0);
+                this.Height -= 10;
+                this.Top += 10;
+            } 
         }
     }
 }
