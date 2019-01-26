@@ -9,6 +9,7 @@ namespace Time_Tracker.Resources.Classes
         //Setting Variables
         public bool bWindowMovable = false;        
         public bool bStartWithWindows = false;
+        public bool bHideWindowAutomatically = false;
 
         public Settings(string sSettingsFilePath)
         {

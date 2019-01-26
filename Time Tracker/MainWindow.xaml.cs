@@ -72,7 +72,10 @@ namespace Time_Tracker
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            this.Visibility = Visibility.Collapsed;
+            if (oSettings.bHideWindowAutomatically)
+            {
+                this.Visibility = Visibility.Collapsed;
+            }            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -99,7 +102,7 @@ namespace Time_Tracker
 
         private void UiClose_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            this.Visibility = Visibility.Collapsed;
         }
 
         private void UiStart_Click(object sender, RoutedEventArgs e)
