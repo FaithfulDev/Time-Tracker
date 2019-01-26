@@ -8,6 +8,7 @@ namespace Time_Tracker.Resources.Classes
 
         //Setting Variables
         public bool bWindowMovable = false;        
+        public bool bStartWithWindows = false;
 
         public Settings(string sSettingsFilePath)
         {
@@ -20,6 +21,7 @@ namespace Time_Tracker.Resources.Classes
             oJSONParser.Load(sUserSettingsFilePath);
 
             bWindowMovable = (bool)oJSONParser.GetValue("WindowMovable", false);            
+            bStartWithWindows = (bool)oJSONParser.GetValue("StartWithWindows", false);
         }
 
         public void SaveSettings()
