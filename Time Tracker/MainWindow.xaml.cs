@@ -8,6 +8,7 @@ namespace Time_Tracker
 {
     public partial class MainWindow : Window
     {
+        private string sAppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TimeTracker";
         private Database oDatabase;
         private Settings oSettings;
         private DateTime dStart;
@@ -25,8 +26,8 @@ namespace Time_Tracker
             oTimer.Tick += new EventHandler(Timer_Tick);
             oTimer.Interval = new TimeSpan(0, 0, 1);            
 
-            oDatabase = new Database(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\TimeTracker");
-            oSettings = new Settings(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\TimeTracker");
+            oDatabase = new Database(sAppDataPath);
+            oSettings = new Settings(sAppDataPath);
             ApplySettings();
 
             cTodaysTimes = oDatabase.GetTodaysTimes();
