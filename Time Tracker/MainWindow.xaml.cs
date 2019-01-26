@@ -39,6 +39,7 @@ namespace Time_Tracker
         private void ApplySettings()
         {
             if (oSettings.bWindowMovable){ MakeWindowMovable(); }else{ MakeWindowUnMovable(); }
+            SetStartWithWindows();
         }
 
         private void CalculateWorkedTime()
@@ -200,6 +201,21 @@ namespace Time_Tracker
                 this.Height -= 10;
                 this.Top += 10;
             } 
+        }
+
+        private void SetStartWithWindows()
+        {
+            var sPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
+            Microsoft.Win32.RegistryKey oKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(sPath, true);
+
+            if (oSettings.bStartWithWindows)
+            {
+                oKey.SetValue("TimeTracker", System.Windows.Forms.Application.ExecutablePath.ToString());
+            }
+            else
+            {
+                oKey.DeleteValue("TimeTracker", false);
+            }
         }
     }
 }
