@@ -87,7 +87,7 @@ namespace Time_Tracker
         {
             if (oTimer.IsEnabled)
             {
-                if(MessageBox.Show("If you quit the App now your current timer will be lost. Quit anyway?",
+                if(MessageBox.Show(this, "If you quit the App now your current timer will be lost. Quit anyway?",
                                 "Quit?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
                 {
                     e.Cancel = true;
@@ -97,7 +97,7 @@ namespace Time_Tracker
 
         private void MenuItem_Quit_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown(0);
+            this.Close();
         }
 
         private void UiClose_Click(object sender, RoutedEventArgs e)
