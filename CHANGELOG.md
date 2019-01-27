@@ -18,6 +18,7 @@ This document tracks changes parallel to development and contains unreleased cha
     * Automatically start new Timer after every stopped one
     * Automatically start Timer on start
     * Set Regular Working Hours (important for over time calculation).
+    * Calculate over time for each day with at least 1 time (+other stuff related to that).
 ### Improvements
 * Tray icon menu style updated.
 ### Bug Fixes
