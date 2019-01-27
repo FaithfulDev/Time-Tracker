@@ -95,18 +95,47 @@ namespace Time_Tracker.Resources.Classes
             return cTodaysTimes;
         }
 
-        public int GetOverTime(int iStandardWorkTimeSeconds)
+        public int GetOverTime(int iStandardWorkTimeSeconds, bool bCurrentMonthOnly)
         {
             int iOverTime = 0;
 
             SQLiteConnection oSQLiteConnection = new SQLiteConnection($"Data Source={sDatabasePath}\\TimeTracker.db;Version=3;foreign keys=true;");
             oSQLiteConnection.Open();
 
-            string sSQL = 
+            string sSQL;
+
+            if (bCurrentMonthOnly)
+            {
+                sSQL =
+                $@"SELECT 
+                        (
+                            SELECT count(DISTINCT date(start)) 
+                            FROM TimeTracker 
+                            WHERE date(start) != date('now', 'localtime') and
+                                    strftime('%m', start) = strftime('%m', date('now', 'localtime')) and 
+                                    strftime('%Y', start) = strftime('%Y', date('now', 'localtime'))
+                        ) * 28800 TotalBaseTime,
+                        ifnull((
+                            SELECT sum(strftime('%s', [end]) - strftime('%s', start)) 
+                            FROM TimeTracker 
+                            WHERE date(start) != date('now', 'localtime') and 
+                                    strftime('%m', start) = strftime('%m', date('now', 'localtime')) and 
+                                    strftime('%Y', start) = strftime('%Y', date('now', 'localtime'))
+                            ), 0) TotalActualTime
+                    FROM TimeTracker LIMIT 1";
+            }
+            else
+            {
+                sSQL =
                 $@"SELECT 
                      (SELECT count(DISTINCT date(start)) from TimeTracker WHERE date(start) != date('now', 'localtime')) * {iStandardWorkTimeSeconds} TotalBaseTime,
-                     ifnull((SELECT sum(strftime('%s', [end]) - strftime('%s', start)) FROM TimeTracker WHERE date(start) != date('now', 'localtime')), 0) TotalActualTime
+                     ifnull((
+                        SELECT sum(strftime('%s', [end]) - strftime('%s', start)) 
+                        FROM TimeTracker 
+                        WHERE date(start) != date('now', 'localtime')
+                      ), 0) TotalActualTime
                    FROM TimeTracker LIMIT 1";
+            }
 
             SQLiteDataReader oSQLiteReader = new SQLiteCommand(sSQL, oSQLiteConnection).ExecuteReader();
 

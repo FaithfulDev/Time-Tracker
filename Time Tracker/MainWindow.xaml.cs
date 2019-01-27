@@ -51,7 +51,7 @@ namespace Time_Tracker
                 iWorkedTimeSeconds += (int)Math.Round((oTime.dEnd - oTime.dStart).TotalSeconds, 0);
             }
             
-            iOverTime = oDatabase.GetOverTime(oSettings.iStandardWorkTimeSeconds);
+            iOverTime = oDatabase.GetOverTime(oSettings.iStandardWorkTimeSeconds, oSettings.bOvertimeCurrentMonthOnly);
         }
 
         private void SetStartupPosition()
@@ -191,21 +191,63 @@ namespace Time_Tracker
 
             int iWorkedTimePlusCurrent = iWorkedTimeSeconds + (int)Math.Round((DateTime.Now - dStart).TotalSeconds, 0);
 
-            if (iWorkedTimePlusCurrent < oSettings.iStandardWorkTimeSeconds)
+            if (oSettings.bCalculateTimeDeficit)
             {
-                sWorkedTime = TimeSpan.FromSeconds(iWorkedTimePlusCurrent).ToString(@"hh\:mm\:ss");
-                sOverTime = (iOverTime >= 0 ? "+" : "-")
-                        + TimeSpan.FromSeconds((iOverTime >= 0 ? iOverTime : iOverTime * (-1))).ToString(@"hh\:mm");
+                int iRemainingWorkingTimePlusCurrent = oSettings.iStandardWorkTimeSeconds - iWorkedTimePlusCurrent;
+
+                if(iRemainingWorkingTimePlusCurrent > 0)
+                {
+                    sWorkedTime = TimeSpan.FromSeconds(iRemainingWorkingTimePlusCurrent).ToString(@"hh\:mm\:ss");
+
+                    if (oSettings.bCalculateOvertime)
+                    {
+                        sOverTime = (iOverTime >= 0 ? "-" : "+")
+                            + TimeSpan.FromSeconds((iOverTime >= 0 ? iOverTime : iOverTime * (-1))).ToString(@"hh\:mm");
+                    }
+                }
+                else
+                {
+                    int iOverTimePlusCurrent = iOverTime + (iWorkedTimePlusCurrent - oSettings.iStandardWorkTimeSeconds);
+                    sWorkedTime = "00:00:00";
+
+                    if (oSettings.bCalculateOvertime)
+                    {
+                        sOverTime = (iOverTimePlusCurrent >= 0 ? "-" : "+")
+                            + TimeSpan.FromSeconds((iOverTimePlusCurrent >= 0 ? iOverTimePlusCurrent : iOverTimePlusCurrent * (-1))).ToString(@"hh\:mm");
+                    }
+                }
             }
             else
             {
-                int iOverTimePlusCurrent = iOverTime + (iWorkedTimePlusCurrent - oSettings.iStandardWorkTimeSeconds);
-                sWorkedTime = TimeSpan.FromSeconds(oSettings.iStandardWorkTimeSeconds).ToString(@"hh\:mm\:ss");
-                sOverTime = (iOverTimePlusCurrent >= 0 ? "+" : "-")
-                        + TimeSpan.FromSeconds((iOverTimePlusCurrent >= 0 ? iOverTimePlusCurrent : iOverTimePlusCurrent * (-1))).ToString(@"hh\:mm");
-            }
+                if (iWorkedTimePlusCurrent < oSettings.iStandardWorkTimeSeconds)
+                {
+                    sWorkedTime = TimeSpan.FromSeconds(iWorkedTimePlusCurrent).ToString(@"hh\:mm\:ss");
 
-            this.uiOvertime.Content = $"{sWorkedTime} ({sOverTime})";
+                    if (oSettings.bCalculateOvertime)
+                    {
+                        sOverTime = (iOverTime >= 0 ? "+" : "-")
+                            + TimeSpan.FromSeconds((iOverTime >= 0 ? iOverTime : iOverTime * (-1))).ToString(@"hh\:mm");
+                    }
+                }
+                else
+                {
+                    int iOverTimePlusCurrent = iOverTime + (iWorkedTimePlusCurrent - oSettings.iStandardWorkTimeSeconds);
+                    sWorkedTime = TimeSpan.FromSeconds(oSettings.iStandardWorkTimeSeconds).ToString(@"hh\:mm\:ss");
+
+                    if (oSettings.bCalculateOvertime)
+                    {
+                        sOverTime = (iOverTimePlusCurrent >= 0 ? "+" : "-")
+                            + TimeSpan.FromSeconds((iOverTimePlusCurrent >= 0 ? iOverTimePlusCurrent : iOverTimePlusCurrent * (-1))).ToString(@"hh\:mm");
+                    }
+                }
+            }            
+
+            this.uiOvertime.Content = $"{sWorkedTime}";
+
+            if (oSettings.bCalculateOvertime)
+            {
+                this.uiOvertime.Content += $" ({sOverTime})";
+            }
         }
 
         private void DragWindow_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
