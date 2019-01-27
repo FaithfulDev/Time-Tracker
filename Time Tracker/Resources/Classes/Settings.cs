@@ -12,6 +12,7 @@ namespace Time_Tracker.Resources.Classes
         public bool bHideWindowAutomatically = true;
         public bool bAutomaticallyStartNewTimer = true;
         public bool bAutomaticallyStartTimerOnStart = false;
+        public int iStandardWorkTimeSeconds = 28800;
 
         public Settings(string sSettingsFilePath)
         {
