@@ -14,7 +14,6 @@ namespace Time_Tracker
         private DateTime dStart;
         private DispatcherTimer oTimer = new DispatcherTimer();
         private List<Database.TimeRecord> cTodaysTimes;
-        private int iStandardWorkTimeSeconds = 28800;
         private int iWorkedTimeSeconds;
         private int iOverTime;
 
@@ -52,7 +51,7 @@ namespace Time_Tracker
                 iWorkedTimeSeconds += (int)Math.Round((oTime.dEnd - oTime.dStart).TotalSeconds, 0);
             }
             
-            iOverTime = oDatabase.GetOverTime(iStandardWorkTimeSeconds);
+            iOverTime = oDatabase.GetOverTime(oSettings.iStandardWorkTimeSeconds);
         }
 
         private void SetStartupPosition()
@@ -171,7 +170,7 @@ namespace Time_Tracker
 
             int iWorkedTimePlusCurrent = iWorkedTimeSeconds + (int)Math.Round((DateTime.Now - dStart).TotalSeconds, 0);
 
-            if (iWorkedTimePlusCurrent < iStandardWorkTimeSeconds)
+            if (iWorkedTimePlusCurrent < oSettings.iStandardWorkTimeSeconds)
             {
                 sWorkedTime = TimeSpan.FromSeconds(iWorkedTimePlusCurrent).ToString(@"hh\:mm\:ss");
                 sOverTime = (iOverTime >= 0 ? "+" : "-")
@@ -179,8 +178,8 @@ namespace Time_Tracker
             }
             else
             {
-                int iOverTimePlusCurrent = iOverTime + (iWorkedTimePlusCurrent - iStandardWorkTimeSeconds);
-                sWorkedTime = TimeSpan.FromSeconds(iStandardWorkTimeSeconds).ToString(@"hh\:mm\:ss");
+                int iOverTimePlusCurrent = iOverTime + (iWorkedTimePlusCurrent - oSettings.iStandardWorkTimeSeconds);
+                sWorkedTime = TimeSpan.FromSeconds(oSettings.iStandardWorkTimeSeconds).ToString(@"hh\:mm\:ss");
                 sOverTime = (iOverTimePlusCurrent >= 0 ? "+" : "-")
                         + TimeSpan.FromSeconds((iOverTimePlusCurrent >= 0 ? iOverTimePlusCurrent : iOverTimePlusCurrent * (-1))).ToString(@"hh\:mm");
             }
