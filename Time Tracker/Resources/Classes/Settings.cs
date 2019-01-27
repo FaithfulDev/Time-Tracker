@@ -11,6 +11,7 @@ namespace Time_Tracker.Resources.Classes
         public bool bStartWithWindows = false;
         public bool bHideWindowAutomatically = true;
         public bool bAutomaticallyStartNewTimer = true;
+        public bool bAutomaticallyStartTimerOnStart = false;
 
         public Settings(string sSettingsFilePath)
         {

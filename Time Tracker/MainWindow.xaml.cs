@@ -81,6 +81,12 @@ namespace Time_Tracker
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Collapsed;
+
+            if (oSettings.bAutomaticallyStartTimerOnStart)
+            {
+                //Start new timer 
+                UiStart_Click(null, null);
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
