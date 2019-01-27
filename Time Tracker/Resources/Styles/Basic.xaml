@@ -228,4 +228,69 @@
         </Style.Triggers>
     </Style>
 
+    <!--
+    ####################################
+    Menu (all parts)
+    ####################################
+    -->
+
+    <Style TargetType="ContextMenu">
+        <Setter Property="Background" Value="{StaticResource Color2}"/>
+        <Setter Property="BorderThickness" Value="1,1,2,1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Color1}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContextMenu">
+                    <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ItemsPresenter/>
+                    </Border>                    
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="MenuItem">
+        <Setter Property="Background" Value="{StaticResource Color2}"/>
+        <Setter Property="Foreground" Value="{StaticResource Color9}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border Background="{TemplateBinding Background}" BorderThickness="0">
+                        <ContentPresenter Margin="6,3,6,3" ContentSource="Header" RecognizesAccessKey="True"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="true">
+                            <Setter Property="Background" Value="{StaticResource Color7}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Separator" x:Key="{x:Static MenuItem.SeparatorStyleKey}">
+        <Setter Property="Background" Value="{StaticResource Color2}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Color1}"/>
+        <Setter Property="BorderThickness" Value="0,1,0,0"/>
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Separator">
+                    <Border 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        Background="{TemplateBinding Background}" 
+                        Height="1" 
+                        SnapsToDevicePixels="true"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>    
+    
+
 </ResourceDictionary>

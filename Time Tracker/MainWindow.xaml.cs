@@ -105,6 +105,27 @@ namespace Time_Tracker
             this.Close();
         }
 
+        private void MenuItem_Open_Click(object sender, RoutedEventArgs e)
+        {
+            this.Visibility = Visibility.Visible;
+            this.Activate();
+        }
+
+        private void MenuItem_ShowAll_Click(object sender, RoutedEventArgs e)
+        {
+            //Not Implemented
+        }
+
+        private void MenuItem_About_Click(object sender, RoutedEventArgs e)
+        {
+            //Not Implemented
+        }
+
+        private void MenuItem_Settings_Click(object sender, RoutedEventArgs e)
+        {
+            //Not Implemented
+        }
+
         private void UiClose_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Collapsed;
