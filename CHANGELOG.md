@@ -18,6 +18,8 @@ This document tracks changes parallel to development and contains unreleased cha
     * Automatically start new Timer after every stopped one
     * Automatically start Timer on start
     * Set Regular Working Hours (important for over time calculation).
+### Improvements
+* Tray icon menu style updated.
 ### Bug Fixes
 * End time is now always set to `now-1` to align with the start time of the next timer.
 * Start and End time are now saved in 24h format.

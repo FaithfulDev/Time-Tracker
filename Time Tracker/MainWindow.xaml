@@ -20,6 +20,12 @@
                     >
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="Time Tracker" IsEnabled="False"/>
+                    <Separator/>
+                    <MenuItem Header="Open" Click="MenuItem_Open_Click"/>
+                    <MenuItem Header="Show All" Click="MenuItem_ShowAll_Click" Visibility="Collapsed"/>
+                    <MenuItem Header="Settings" Click="MenuItem_Settings_Click" Visibility="Collapsed"/>
+                    <MenuItem Header="About" Click="MenuItem_About_Click" Visibility="Collapsed"/>                    
                     <MenuItem Header="Quit" Click="MenuItem_Quit_Click"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
