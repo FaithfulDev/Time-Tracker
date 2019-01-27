@@ -136,8 +136,11 @@ namespace Time_Tracker
             
             CalculateWorkedTime();
 
-            //Start new timer 
-            UiStart_Click(null, null);
+            if (oSettings.bAutomaticallyStartNewTimer)
+            {
+                //Start new timer 
+                UiStart_Click(null, null);
+            }            
         }
 
         private void Timer_Tick(object sender, EventArgs e)
