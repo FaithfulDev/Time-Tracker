@@ -103,7 +103,9 @@ namespace JSONParser
                 }
                 else if (oItem.Value is bool)
                 {
-                    sJSON += oItem.Value;
+                    string sBoolValue = "";
+                    sBoolValue += oItem.Value;
+                    sJSON += sBoolValue.ToLower();
                 }
                 else
                 {
